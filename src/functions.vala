@@ -74,7 +74,7 @@ namespace SwayNotificationCenter {
 
             try {
                 // Load packaged CSS as backup
-                string system_css = get_style_path (null, true);
+                string system_css = get_style_path (null);
                 system_css_provider.load_from_path (system_css);
                 Gtk.StyleContext.add_provider_for_screen (
                     Gdk.Screen.get_default (),
@@ -100,8 +100,7 @@ namespace SwayNotificationCenter {
             }
         }
 
-        public static string get_style_path (owned string ? custom_path,
-                                             bool only_system = false) {
+        public static string get_style_path (owned string ? custom_path) {
             string[] paths = {
                 // Fallback location. Specified in postinstall.py
                 "/usr/local/etc/xdg/swaync/style.css"
@@ -113,11 +112,9 @@ namespace SwayNotificationCenter {
                 }
                 paths += custom_path;
             }
-            if (!only_system) {
-                paths += Path.build_path (Path.DIR_SEPARATOR.to_string (),
-                                          Environment.get_user_config_dir (),
-                                          "swaync/style.css");
-            }
+            paths += Path.build_path (Path.DIR_SEPARATOR.to_string (),
+                                      Environment.get_user_config_dir (),
+                                      "swaync/style.css");
 
             foreach (var path in Environment.get_system_config_dirs ()) {
                 paths += Path.build_path (Path.DIR_SEPARATOR.to_string (),
